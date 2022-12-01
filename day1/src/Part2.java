@@ -1,10 +1,9 @@
-package day1;
-
+import java.util.PriorityQueue;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-class Part1 {
+class Part2 {
 
     /*
      * https://adventofcode.com/2022/day/1
@@ -30,17 +29,26 @@ class Part1 {
      * One important consideration is food - in particular, the number of Calories
      * each Elf is carrying (your puzzle input).
      * 
-     * The Elves take turns writing down the number of Calories contained by the
-     * various meals, snacks, rations, etc. that they've brought with them, one item
-     * per line. Each Elf separates their own inventory from the previous Elf's
-     * inventory (if any) by a blank line.
      * 
-     * For example, suppose the Elves finish writing their items' Calories and end
+     * 
+     * The Elves take turns writing down the number of Calories contained by the
+     * various meals, snacks, rati
+     * ons, etc. that they've brought with them, one item
+     * any) by a blank
+     * line.
+     * suppose the Elves finish writing their items' Calories and end
      * up with the following list:
      * 
-     * 1000
+     * 
+     * 
+     * 
+     * 
      * 2000
+     * 
+     * 
      * 3000
+     * 
+     * 
      * 
      * 4000
      * 
@@ -54,7 +62,7 @@ class Part1 {
      * 10000
      * This list represents the Calories of the food carried by five Elves:
      * 
-     * The first Elf is carrying food with 1000, 2000, and 3000 Calories, a total of
+     * The first Elf
      * 6000 Calories.
      * The second Elf is carrying one food item with 4000 Calories.
      * The third Elf is carrying food with 5000 and 6000 Calories, a total of 11000
@@ -69,33 +77,66 @@ class Part1 {
      * 
      * Find the Elf carrying the most Calories. How many total Calories is that Elf
      * carrying?
+     * 
+     * --- Part Two ---
+     * By the time you calculate the answer to the Elves' question, they've already
+     * realized that the Elf carrying the most Calories of food might eventually run
+     * out of snacks.
+     * 
+     * To avoid this unacceptable situation, the Elves would instead like to know
+     * the total Calories carried by the top three Elves carrying the most Calories.
+     * That way, even if one of those Elves runs out of snacks, they still have two
+     * backups.
+     * 
+     * In the example above, the top three Elves are the fourth Elf (with 24000
+     * Calories), then the third Elf (with 11000 Calories), then the fifth Elf (with
+     * 10000 Calories). The sum of the Calories carried by these three elves is
+     * 45000.
+     * 
+     * Find the top three Elves carrying the most Calories. How many Calories are
+     * those Elves carrying in total?
      */
+
+    static final int NUM_TOP_ELVES = 3;
+
+    public static void addElfToTopElves(int calories, PriorityQueue<Integer> topElves) {
+        topElves.add(calories);
+        if (topElves.size() > NUM_TOP_ELVES) {
+            topElves.poll();
+        }
+    }
 
     public static void main(String args[]) {
 
         try {
 
-            Scanner s = new Scanner(new File("src/day1/input.txt"));
+            Scanner s = new Scanner(new File("src/input.txt"));
 
-            int max_calories = 0;
-            int current_calories = 0;
+            int currentCalories = 0;
+            PriorityQueue<Integer> topElves = new PriorityQueue<Integer>();
 
             while (s.hasNextLine()) {
                 String line = s.nextLine();
 
                 if (line.equals("")) {
-                    max_calories = Math.max(max_calories, current_calories);
-                    current_calories = 0;
+                    addElfToTopElves(currentCalories, topElves);
+                    currentCalories = 0;
                 } else {
-                    current_calories += Integer.parseInt(line);
+                    currentCalories += Integer.parseInt(line);
                 }
             }
+            addElfToTopElves(currentCalories, topElves);
 
-            max_calories = Math.max(max_calories, current_calories);
+            int totalCalories = 0;
+            while (!topElves.isEmpty()) {
+                totalCalories += topElves.poll();
+            }
 
-            System.out.println(max_calories);
+            System.out.println(totalCalories);
 
-        } catch (FileNotFoundException e) {
+        } catch (
+
+        FileNotFoundException e) {
             e.printStackTrace();
         }
     }
