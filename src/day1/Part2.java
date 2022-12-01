@@ -2,6 +2,7 @@ package day1;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.PriorityQueue;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -80,7 +81,34 @@ class Part2 {
      * 
      * Find the Elf carrying the most Calories. How many total Calories is that Elf
      * carrying?
+     * 
+     * --- Part Two ---
+     * By the time you calculate the answer to the Elves' question, they've already
+     * realized that the Elf carrying the most Calories of food might eventually run
+     * out of snacks.
+     * 
+     * To avoid this unacceptable situation, the Elves would instead like to know
+     * the total Calories carried by the top three Elves carrying the most Calories.
+     * That way, even if one of those Elves runs out of snacks, they still have two
+     * backups.
+     * 
+     * In the example above, the top three Elves are the fourth Elf (with 24000
+     * Calories), then the third Elf (with 11000 Calories), then the fifth Elf (with
+     * 10000 Calories). The sum of the Calories carried by these three elves is
+     * 45000.
+     * 
+     * Find the top three Elves carrying the most Calories. How many Calories are
+     * those Elves carrying in total?
      */
+
+    static final int NUM_TOP_ELVES = 3;
+
+    public static void addElfToTopElves(int calories, PriorityQueue<Integer> topElves) {
+        topElves.add(calories);
+        if (topElves.size() > NUM_TOP_ELVES) {
+            topElves.poll();
+        }
+    }
 
     public static void main(String args[]) {
 
@@ -89,30 +117,30 @@ class Part2 {
             Scanner s = new Scanner(new File("src/day1/input.txt"));
 
             int currentCalories = 0;
-            ArrayList<Integer> elves = new ArrayList<Integer>();
+            PriorityQueue<Integer> topElves = new PriorityQueue<Integer>();
 
             while (s.hasNextLine()) {
                 String line = s.nextLine();
 
                 if (line.equals("")) {
-                    elves.add(currentCalories);
+                    addElfToTopElves(currentCalories, topElves);
                     currentCalories = 0;
                 } else {
                     currentCalories += Integer.parseInt(line);
                 }
             }
-            elves.add(currentCalories);
-
-            Collections.sort(elves, Collections.reverseOrder());
+            addElfToTopElves(currentCalories, topElves);
 
             int totalCalories = 0;
-            for (int i = 0; i < 3; i++) {
-                totalCalories += elves.get(i);
+            while (!topElves.isEmpty()) {
+                totalCalories += topElves.poll();
             }
 
             System.out.println(totalCalories);
 
-        } catch (FileNotFoundException e) {
+        } catch (
+
+        FileNotFoundException e) {
             e.printStackTrace();
         }
     }
