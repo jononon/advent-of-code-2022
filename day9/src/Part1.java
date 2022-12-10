@@ -33,9 +33,6 @@ class Part1 {
                         break;
                 }
                 moveTailToValidSpot(instruction[0]);
-                // System.out.println("H " + headLocation[0] + "," + headLocation[1] + " - T " +
-                // tailLocation[0] + ","
-                // + tailLocation[1]);
             }
         }
 
